@@ -51,7 +51,7 @@ public:
         }
 
         return false;
-    };
+    }
 
     void remover(CType clave) {
         int indice = funcionHash(clave);
@@ -63,13 +63,35 @@ public:
             }
         }
     }
-    
+
+    void imprimir() const {
+        std::cout << "\n--- Estado actual de la Tabla ---" << std::endl;
+        std::cout << "Formato: (Clave, Valor)" << std::endl;
+        
+        for (int i = 0; i < size; ++i) {
+            std::cout << "[" << i << "] ";
+
+            if (tabla[i].empty()) {
+                std::cout << "VACIO";
+            }
+            else {
+                for (const auto& entrada : tabla[i]) {
+                    std::cout << "-> (" << entrada.clave << ", " << entrada.valor << ") ";
+                }
+            }
+
+            std::cout << std::endl;
+        }
+
+        std::cout << "-----------------------------------------" << std::endl;
+    }
+
 };
 
 // --- Función Hash para string (user_screen_name) ---
 
 template <>
-inline int TablaHashingAbierto<std::string>::funcionHash(std::string clave) const {
+int TablaHashingAbierto<std::string>::funcionHash(std::string clave) const {
     long long h = 0;
     int a = 127;
     for (char v : clave) {
@@ -81,6 +103,6 @@ inline int TablaHashingAbierto<std::string>::funcionHash(std::string clave) cons
 // --- Función Hash para long long (user_id) ---
 
 template <>
-inline int TablaHashingAbierto<long long>::funcionHash(long long clave) const {
+int TablaHashingAbierto<long long>::funcionHash(long long clave) const {
     return clave % size;
 }

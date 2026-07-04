@@ -75,17 +75,19 @@ public:
         std::cout << "Tabla llena, no se pudo insertar " << clave << std::endl;
     }
 
-    int get(CType clave) {
+    bool get(CType clave, int& resultado) {
         for (int i = 0; i < size; i++) {
             int indice = calcularIndiceSondeo(clave, i);
 
             if (tabla[indice].estado == VACIO) break;   
 
             if (tabla[indice].estado == OCUPADO && tabla[indice].clave == clave) {
-                return tabla[indice].valor;
+                resultado = tabla[indice].valor;
+                return true;
             }
         }
-        return -1;
+
+        return false;
     }
 
     void remover(CType clave) {
@@ -101,13 +103,15 @@ public:
         }
     }
 
-    void imprimir() {
+    void imprimir() const {
         std::cout << "\n--- Estado actual de la Tabla ---" << std::endl;
+        std::cout << "Formato: (Clave, Valor)" << std::endl;
+
         for (int i = 0; i < size; i++) {
             std::cout << "[" << i << "] ";
             
             if (tabla[i].estado == OCUPADO) {
-                std::cout << "Clave: " << tabla[i].clave << "\t| Valor: " << tabla[i].valor;
+                std::cout << "(" << tabla[i].clave << ", " << tabla[i].valor << ") ";
             } else if (tabla[i].estado == VACIO) {
                 std::cout << "VACIO";
             } else if (tabla[i].estado == BORRADO) {
@@ -119,12 +123,21 @@ public:
 
         std::cout << "---------------------------------" << std::endl;
     }
+
 };
 
 // --- Función Hash para string (user_screen_name) ---
 
+/**
+ * @brief Función Hash para claves strings
+ *
+ * @param k Clave de tipo string que se desea convertir.
+ * @param n Tamaño de la tabla hash.
+ *
+ * @return El índice calculado para la clave (un número entero entre 0 y n-1).
+ */
 template <>
-inline int TablaHashingCerrado<std::string>::h1(std::string k, int n) {
+int TablaHashingCerrado<std::string>::h1(std::string k, int n) {
     long long h = 0;
     int a = 127;
     for (char v : k) {
@@ -133,8 +146,16 @@ inline int TablaHashingCerrado<std::string>::h1(std::string k, int n) {
     return h;
 }
 
+/**
+ * @brief Función Hash (Double Hashing)
+ *
+ * @param k Clave de tipo string que se desea convertir.
+ * @param n Tamaño de la tabla hash.
+ *
+ * @return Un número entero que representa el intervalo de salto para el double hashing.
+ */
 template <>
-inline int TablaHashingCerrado<std::string>::h2(std::string k, int n) {
+int TablaHashingCerrado<std::string>::h2(std::string k, int n) {
     long long h = 0;
     int a = 31; 
     for (char v : k) {
@@ -147,12 +168,12 @@ inline int TablaHashingCerrado<std::string>::h2(std::string k, int n) {
 // --- Función Hash para long long (user_id) ---
 
 template <>
-inline int TablaHashingCerrado<long long>::h1(long long k, int n) {
+int TablaHashingCerrado<long long>::h1(long long k, int n) {
     return k % n;
 }
 
 template <>
-inline int TablaHashingCerrado<long long>::h2(long long k, int n) {
+int TablaHashingCerrado<long long>::h2(long long k, int n) {
     int R = 97; 
     return R - (k % R);
 }
