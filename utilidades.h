@@ -80,3 +80,22 @@ void contarTweets(TType<CType>& H, const CType& k) {
         H.insertar(k, 1);
     }
 }
+
+/**
+ * @brief Función de utilidad para extraer una columna del CSV y cargarla en memoria RAM (vector) de forma rápida y segura, ignorando errores de formato. Uso para experimentos.
+ */
+template <typename CType>
+void cargarVector(std::vector<CType>& contenedor, const std::string& ruta_archivo, const std::string& nombre_columna) {
+    io::CSVReader<1, io::trim_chars<' ', '\t'>, io::double_quote_escape<',', '\"'>> in(ruta_archivo);
+    in.read_header(io::ignore_extra_column, nombre_columna);
+
+    CType valor_temporal;
+    while (true) {
+        try {
+            if (!in.read_row(valor_temporal)) break;
+            contenedor.push_back(valor_temporal);
+        } catch (...) { 
+            // Ignoramos silenciosamente las filas corruptas
+        }
+    }
+}

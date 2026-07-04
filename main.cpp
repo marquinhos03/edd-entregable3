@@ -14,51 +14,10 @@
 // Set-ExecutionPolicy Bypass -Scope Process -Force; .\run_experiments.ps1
 
 #include <iostream>
-<<<<<<< Updated upstream
-#include "hashing_cerrado.h"
-#include "hashing_abierto.h"
-#include "utilidades.h"
-
-using namespace std;
-
-const string ruta_dataset = "datasets/auspol2019.csv";
-
-int main() {
-    int N = 40;
-    // factor de carga: alfa = n / N
-    // En esta prueba, alfa = 0.5 (no cumple alfa < 0.5)
-    // Número de pruebas esperado con direccionamiento abierto = 1 / (1 - alfa) = 2
-
-    int maxFilas = 20;
-
-    // ========================================
-    // HASHING CERRADO: USER_ID (long long)
-    // ========================================
-
-    TablaHashingCerrado<long long> thc_user_id(N, LINEAR_PROBING);
-    cargarDataset(thc_user_id, ruta_dataset, "user_id", maxFilas);
-    thc_user_id.imprimir();
-
-    // ========================================
-    // HASHING CERRADO: USER_SCREEN_NAME (string)
-    // ========================================
-
-    TablaHashingCerrado<string> thc_user_screen_name(N, LINEAR_PROBING);
-    cargarDataset(thc_user_screen_name, ruta_dataset, "user_screen_name", maxFilas);
-    thc_user_screen_name.imprimir();
-
-    // TablaHashingAbierto<long long> tha_user_id(N);
-    // cargarDataset(tha_user_id, ruta_dataset, "user_id", maxFilas);
-    // tha_user_id.imprimir();
-
-    // TablaHashingAbierto<string> tha_user_screen_name(N);
-    // cargarDataset(tha_user_screen_name, ruta_dataset, "user_screen_name", maxFilas);
-    // tha_user_screen_name.imprimir();
-
-=======
 #include <string>
 #include <vector>
 #include "extern/csv.h"
+#include "utilidades.h"
 #include "experimentos.h"
 
 using namespace std;
@@ -75,36 +34,21 @@ int main(int argc, char** argv) {
     string algoritmo = argv[1];
     string tipo_clave = argv[2];
 
-    // Cargar los datos dependiendo del tipo de clave solicitada
-    io::CSVReader<1, io::trim_chars<' ', '\t'>, io::double_quote_escape<',', '\"'>> in("datasets/auspol2019.csv");
-
     vector<long long> datos_id;
     vector<string> datos_name;
+    const string ruta_csv = "datasets/auspol2019.csv";
 
+    // CARGA DE DATOS
     if (tipo_clave == "id") {
-        in.read_header(io::ignore_extra_column, "user_id"); 
-        long long id_temporal;
-        while (true) {
-            try {
-                if (!in.read_row(id_temporal)) break;
-                datos_id.push_back(id_temporal);
-            } catch (...) { /* Ignorar filas corruptas */ }
-        }
+        cargarVector(datos_id, ruta_csv, "user_id");
     } else if (tipo_clave == "name") {
-        in.read_header(io::ignore_extra_column, "user_screen_name"); 
-        string name_temporal;
-        while (true) {
-            try {
-                if (!in.read_row(name_temporal)) break;
-                datos_name.push_back(name_temporal);
-            } catch (...) { /* Ignorar filas corruptas */ }
-        }
+        cargarVector(datos_name, ruta_csv, "user_screen_name");
     } else {
         cerr << "Tipo de clave no reconocido." << endl;
         exit(1);
     }
 
-    // Ejecutar el algoritmo solicitado
+    // EJECUCIÓN DE EXPERIMENTO PARA EL ALGORITMO SOLICITADO
     if (algoritmo == "unordered_map") {
         if (tipo_clave == "id") run_unordered_map(datos_id, algoritmo, tipo_clave);
         else run_unordered_map(datos_name, algoritmo, tipo_clave);
@@ -129,7 +73,6 @@ int main(int argc, char** argv) {
         cerr << "Algoritmo no reconocido." << endl;
         exit(1);
     }
->>>>>>> Stashed changes
 
     return 0;
 }
