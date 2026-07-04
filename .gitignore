@@ -5,3 +5,5 @@ main.exe
 
 *.o
 *.obj
+
+*.csv
