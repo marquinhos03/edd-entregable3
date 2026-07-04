@@ -5,17 +5,17 @@
 #include <list>
 
 template <typename CType>
-struct Entrada {
+struct EntradaAbierta {
     CType clave;
     int valor;
 
-    Entrada(CType c, int v) : clave(c), valor(v) {}
+    EntradaAbierta(CType c, int v) : clave(c), valor(v) {}
 };
 
 template <typename CType>
 class TablaHashingAbierto {
 private:
-    std::vector<std::list<Entrada<CType>>> tabla;
+    std::vector<std::list<EntradaAbierta<CType>>> tabla;
     int size;
 
     int funcionHash(CType clave) const;
@@ -69,7 +69,7 @@ public:
 // --- Función Hash para string (user_screen_name) ---
 
 template <>
-int TablaHashingAbierto<std::string>::funcionHash(std::string clave) const {
+inline int TablaHashingAbierto<std::string>::funcionHash(std::string clave) const {
     long long h = 0;
     int a = 127;
     for (char v : clave) {
@@ -81,7 +81,6 @@ int TablaHashingAbierto<std::string>::funcionHash(std::string clave) const {
 // --- Función Hash para long long (user_id) ---
 
 template <>
-int TablaHashingAbierto<long long>::funcionHash(long long clave) const {
-    // Para números enteros, aplicamos la división modular directa
+inline int TablaHashingAbierto<long long>::funcionHash(long long clave) const {
     return clave % size;
 }
