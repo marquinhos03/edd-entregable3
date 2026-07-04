@@ -5,38 +5,41 @@
 
 enum Estado { VACIO, OCUPADO, BORRADO };
 
+enum ProbingType { LINEAR_PROBING, QUADRATIC_PROBING, DOUBLE_HASHING };
+
 struct Entrada {
-    int clave;
-    std::string valor;
+    std::string clave;
+    int valor;
     Estado estado;
 
-    Entrada() : clave(0), valor(""), estado(VACIO) {}
+    Entrada() : clave(""), valor(0), estado(VACIO) {}
 };
 
 class TablaHashingCerrado {
 private:
     std::vector<Entrada> tabla;
     int size;
+    ProbingType probing_type;
 
-    int h1(int k, int n);
-    int h2(int k, int n);
+    int h1(std::string k, int n);
+    int h2(std::string k, int n);
 
-    int linear_probing(int k, int n, int i);
-    int quadratic_probing(int k, int n, int i);
-    int double_hashing(int k, int n, int i);
+    int linear_probing(std::string k, int n, int i);
+    int quadratic_probing(std::string k, int n, int i);
+    int double_hashing(std::string k, int n, int i);
 
 public:
-    TablaHashingCerrado(int tablaSize) : size(tablaSize) {
+    TablaHashingCerrado(int s, ProbingType pt) : size(s), probing_type(pt) {
         tabla.resize(size);
     }
 
-    int calcularIndiceSondeo(int clave, int i);
+    int calcularIndiceSondeo(std::string clave, int i, ProbingType probing_type);
 
-    void insertar(int clave, std::string valor);
+    void insertar(std::string clave, int valor);
 
-    std::string get(int clave);
+    int get(std::string clave);
 
-    void remover(int clave);
+    void remover(std::string clave);
 
     void imprimir();
 };
