@@ -104,12 +104,11 @@ public:
     }
 
     void imprimir() const {
-        std::cout << "\n--- Estado actual de la Tabla Hash (Cerrado) ---" << std::endl;
-        std::cout << "Índice\t(Clave, Valor)" << std::endl;
-        std::cout << "---------------------------------" << std::endl;
+        std::cout << "\n--- Estado actual de la Tabla ---" << std::endl;
+        std::cout << "Formato: (Clave, Valor)" << std::endl;
 
         for (int i = 0; i < size; i++) {
-            std::cout << "[" << i << "]\t";
+            std::cout << "[" << i << "] ";
             
             if (tabla[i].estado == OCUPADO) {
                 std::cout << "(" << tabla[i].clave << ", " << tabla[i].valor << ") ";

@@ -1,7 +1,7 @@
 $OutputFile = "resultados_experimentos.csv"
 
 # Escribimos la cabecera
-"algoritmo;tipo_clave;numElementos;tiempo_segundos" | Out-File -FilePath $OutputFile -Encoding utf8
+"tipo_tabla;tipo_clave;numElementos;tiempo_segundos" | Out-File -FilePath $OutputFile -Encoding utf8
 
 Write-Host "Iniciando experimentos. Por favor espera..."
 

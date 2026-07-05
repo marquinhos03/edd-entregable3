@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <iostream>
 
 template <typename CType>
 struct EntradaAbierta {

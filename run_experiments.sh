@@ -4,7 +4,7 @@
 OUTPUT_FILE="resultados_experimentos.csv"
 
 # Imprimimos la cabecera del CSV
-echo "algoritmo;tipo_clave;numElementos;tiempo_segundos" > $OUTPUT_FILE
+echo "tipo_tabla;tipo_clave;numElementos;tiempo_segundos" > $OUTPUT_FILE
 
 echo "Iniciando experimentos. Por favor espera..."
 
