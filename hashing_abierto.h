@@ -88,6 +88,19 @@ public:
         std::cout << "---------------------------------" << std::endl;
     }
 
+    /// @brief Calcula una estimación del espacio de memoria total consumido por la estructura de datos.
+    /// @return size_t Cantidad total de memoria ocupada por la estructura (expresada en bytes).
+    size_t getMemoriaBytes() const {
+        // Tamaño base + tamaño pre-reservado del vector de listas
+        size_t total = sizeof(*this) + tabla.capacity() * sizeof(std::list<EntradaAbierta<CType>>);
+        
+        // Sumar el tamaño de los nodos dinámicos (list usa 2 punteros extras por nodo)
+        for (int i = 0; i < size; ++i) {
+            total += tabla[i].size() * (sizeof(EntradaAbierta<CType>) + 2 * sizeof(void*));
+        }
+        return total;
+    }
+
 };
 
 // --- Función Hash para string (user_screen_name) ---

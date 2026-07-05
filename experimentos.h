@@ -28,9 +28,15 @@ void medir_rendimiento(
         if (filasProcesadas == proximo_hito) {
             auto end = std::chrono::high_resolution_clock::now();
             double running_time = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
-            running_time *= 1e-9;
+            running_time *= 1e-9;   // Segundos
+            size_t espacio_bytes = tabla.getMemoriaBytes();
 
-            std::cout << nombre_metodo << ";" << tipo_clave << ";" << filasProcesadas << ";" << running_time << "\n";
+            std::cout << nombre_metodo << ";"
+                << tipo_clave << ";"
+                << filasProcesadas << ";"
+                << running_time << ";"
+                << espacio_bytes << std::endl;
+            
             proximo_hito += 10000;
         }
     }
@@ -58,4 +64,36 @@ void run_hashing_cerrado(const std::vector<K>& datos, ProbingType tipo_sondeo, c
     int N = 200003;
     TablaHashingCerrado<K> tabla(N, tipo_sondeo);
     medir_rendimiento(tabla, datos, nombre_metodo, tipo_clave);
+}
+
+void ejecutar_experimento(
+    const std::string& tipo_tabla, 
+    const std::string& tipo_clave, 
+    const std::vector<long long>& datos_id, 
+    const std::vector<std::string>& datos_name
+) {
+    if (tipo_tabla == "unordered_map") {
+        if (tipo_clave == "id") run_unordered_map(datos_id, tipo_tabla, tipo_clave);
+        else run_unordered_map(datos_name, tipo_tabla, tipo_clave);
+    } 
+    else if (tipo_tabla == "abierto") {
+        if (tipo_clave == "id") run_hashing_abierto(datos_id, tipo_tabla, tipo_clave);
+        else run_hashing_abierto(datos_name, tipo_tabla, tipo_clave);
+    } 
+    else if (tipo_tabla == "cerrado_linear") {
+        if (tipo_clave == "id") run_hashing_cerrado(datos_id, LINEAR_PROBING, tipo_tabla, tipo_clave);
+        else run_hashing_cerrado(datos_name, LINEAR_PROBING, tipo_tabla, tipo_clave);
+    }
+    else if (tipo_tabla == "cerrado_quadratic") {
+        if (tipo_clave == "id") run_hashing_cerrado(datos_id, QUADRATIC_PROBING, tipo_tabla, tipo_clave);
+        else run_hashing_cerrado(datos_name, QUADRATIC_PROBING, tipo_tabla, tipo_clave);
+    }
+    else if (tipo_tabla == "cerrado_double") {
+        if (tipo_clave == "id") run_hashing_cerrado(datos_id, DOUBLE_HASHING, tipo_tabla, tipo_clave);
+        else run_hashing_cerrado(datos_name, DOUBLE_HASHING, tipo_tabla, tipo_clave);
+    }
+    else {
+        std::cerr << "tipo_tabla no reconocida." << std::endl;
+        exit(1);
+    }
 }

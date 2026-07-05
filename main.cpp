@@ -44,35 +44,12 @@ int main(int argc, char** argv) {
     } else if (tipo_clave == "name") {
         cargarVector(datos_name, ruta_csv, "user_screen_name");
     } else {
-        cerr << "Tipo de clave no reconocido." << endl;
+        cerr << "tipo_clave no reconocida." << endl;
         exit(1);
     }
 
     // EJECUCIÓN DE EXPERIMENTO PARA EL tipo_tabla SOLICITADO
-    if (tipo_tabla == "unordered_map") {
-        if (tipo_clave == "id") run_unordered_map(datos_id, tipo_tabla, tipo_clave);
-        else run_unordered_map(datos_name, tipo_tabla, tipo_clave);
-    } 
-    else if (tipo_tabla == "abierto") {
-        if (tipo_clave == "id") run_hashing_abierto(datos_id, tipo_tabla, tipo_clave);
-        else run_hashing_abierto(datos_name, tipo_tabla, tipo_clave);
-    } 
-    else if (tipo_tabla == "cerrado_linear") {
-        if (tipo_clave == "id") run_hashing_cerrado(datos_id, LINEAR_PROBING, tipo_tabla, tipo_clave);
-        else run_hashing_cerrado(datos_name, LINEAR_PROBING, tipo_tabla, tipo_clave);
-    }
-    else if (tipo_tabla == "cerrado_quadratic") {
-        if (tipo_clave == "id") run_hashing_cerrado(datos_id, QUADRATIC_PROBING, tipo_tabla, tipo_clave);
-        else run_hashing_cerrado(datos_name, QUADRATIC_PROBING, tipo_tabla, tipo_clave);
-    }
-    else if (tipo_tabla == "cerrado_double") {
-        if (tipo_clave == "id") run_hashing_cerrado(datos_id, DOUBLE_HASHING, tipo_tabla, tipo_clave);
-        else run_hashing_cerrado(datos_name, DOUBLE_HASHING, tipo_tabla, tipo_clave);
-    }
-    else {
-        cerr << "tipo_tabla no reconocida." << endl;
-        exit(1);
-    }
+    ejecutar_experimento(tipo_tabla, tipo_clave, datos_id, datos_name);
 
     return 0;
 }

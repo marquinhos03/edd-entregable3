@@ -41,4 +41,13 @@ public:
         }
         std::cout << "---------------------------------" << std::endl;
     }
+
+    /// @brief Calcula una estimación del espacio de memoria total consumido por la estructura de datos.
+    /// @return size_t Cantidad total de memoria ocupada por la estructura (expresada en bytes).
+    size_t getMemoriaBytes() const {
+        // Tamaño de la clase + (cantidad de buckets * tamaño de puntero) + (cantidad de elementos * tamaño del nodo)
+        size_t memoria_buckets = tabla.bucket_count() * sizeof(void*);
+        size_t memoria_elementos = tabla.size() * (sizeof(std::pair<const CType, int>) + sizeof(void*) + sizeof(size_t));
+        return sizeof(*this) + memoria_buckets + memoria_elementos;
+    }
 };

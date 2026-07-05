@@ -124,6 +124,13 @@ public:
         std::cout << "---------------------------------" << std::endl;
     }
 
+    /// @brief Calcula una estimación del espacio de memoria total consumido por la estructura de datos.
+    /// @return size_t Cantidad total de memoria ocupada por la estructura (expresada en bytes).
+    size_t getMemoriaBytes() const {
+        // La tabla cerrada es estática, toda su memoria está en el vector pre-reservado
+        return sizeof(*this) + tabla.capacity() * sizeof(EntradaCerrada<CType>);
+    }
+
 };
 
 // --- Función Hash para string (user_screen_name) ---
