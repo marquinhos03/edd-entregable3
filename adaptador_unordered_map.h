@@ -33,7 +33,7 @@ public:
 
     void imprimir() {
         std::cout << "\n--- Estado actual de unordered_map ---" << std::endl;
-        std::cout << "Índice\t(Clave, Valor)" << std::endl;
+        std::cout << "(Clave, Valor)" << std::endl;
         std::cout << "---------------------------------" << std::endl;
         
         for (const auto& par : tabla) {

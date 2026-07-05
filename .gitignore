@@ -6,4 +6,5 @@ main.exe
 *.o
 *.obj
 
+test.csv
 resultados_experimentos.csv
