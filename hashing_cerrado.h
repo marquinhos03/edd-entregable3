@@ -9,6 +9,8 @@ enum Estado { VACIO, OCUPADO, BORRADO };
 
 enum ProbingType { LINEAR_PROBING, QUADRATIC_PROBING, DOUBLE_HASHING };
 
+/// @brief Struct que representa una entrada dentro de la tabla hash cerrada, incluyendo su estado.
+/// @tparam CType Tipo de dato de la clave (ej. long long para user_id o string para user_screen_name).
 template <typename CType>
 struct EntradaCerrada {
     CType clave;
@@ -18,6 +20,8 @@ struct EntradaCerrada {
     EntradaCerrada() : valor(0), estado(VACIO) {}
 };
 
+/// @brief Implementación de la Tabla Hash con hashing cerrado (Direccionamiento Abierto).
+/// @tparam CType Tipo de dato de la clave.
 template <typename CType>
 class TablaHashingCerrado {
 private:
@@ -50,10 +54,16 @@ private:
     }
 
 public:
+    /// @brief Constructor que inicializa la tabla hash cerrada con un tamaño predeterminado y define la estrategia de sondeo.
+    /// @param s Tamaño pre-reservado del vector (número de buckets).
+    /// @param pt Tipo de estrategia de sondeo a utilizar (LINEAR_PROBING, QUADRATIC_PROBING o DOUBLE_HASHING).
     TablaHashingCerrado(int s, ProbingType pt) : size(s), probing_type(pt) {
         tabla.resize(size);
     }
 
+    /// @brief Inserta una entrada utilizando la estrategia de sondeo elegida, o actualiza su valor si la clave ya existe.
+    /// @param clave La clave que se desea insertar o actualizar.
+    /// @param valor El valor entero asociado a la clave (conteo de tweets).
     void insertar(CType clave, int valor) {
         for (int i = 0; i < size; i++) {
             int indice = calcularIndiceSondeo(clave, i);
@@ -75,6 +85,10 @@ public:
         std::cout << "Tabla llena, no se pudo insertar " << clave << std::endl;
     }
 
+    /// @brief Busca una clave en la tabla y recupera su valor asociado.
+    /// @param clave La clave que se desea buscar.
+    /// @param resultado Referencia a un entero donde se almacenará el valor en caso de éxito.
+    /// @return true si la clave fue encontrada, false en caso de que no exista.
     bool get(CType clave, int& resultado) {
         for (int i = 0; i < size; i++) {
             int indice = calcularIndiceSondeo(clave, i);
@@ -90,6 +104,8 @@ public:
         return false;
     }
 
+    /// @brief Elimina una entrada de la tabla buscando por su clave.
+    /// @param clave La clave de la entrada que se desea eliminar.
     void remover(CType clave) {
         for (int i = 0; i < size; i++) {
             int indice = calcularIndiceSondeo(clave, i);
@@ -103,6 +119,7 @@ public:
         }
     }
 
+    /// @brief Imprime todos los pares (Clave, Valor) almacenados actualmente en la tabla.
     void imprimir() const {
         std::cout << "\n--- Estado actual de la Tabla ---" << std::endl;
         std::cout << "Formato: (Clave, Valor)" << std::endl;
@@ -174,11 +191,27 @@ int TablaHashingCerrado<std::string>::h2(std::string k, int n) {
 
 // --- Función Hash para long long (user_id) ---
 
+/**
+ * @brief Función Hash primaria para claves numéricas usando el método de la división.
+ *
+ * @param k Clave numérica de tipo long long.
+ * @param n Tamaño de la tabla hash.
+ *
+ * @return El índice calculado para la clave (un número entero entre 0 y n-1).
+ */
 template <>
 int TablaHashingCerrado<long long>::h1(long long k, int n) {
     return k % n;
 }
 
+/**
+ * @brief Función Hash secundaria para claves numéricas, utilizada como salto en el Double Hashing.
+ *
+ * @param k Clave numérica de tipo long long.
+ * @param n Tamaño de la tabla hash.
+ *
+ * @return Un número entero que representa el intervalo de salto, garantizado de ser mayor a cero.
+ */
 template <>
 int TablaHashingCerrado<long long>::h2(long long k, int n) {
     int R = 97; 

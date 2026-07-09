@@ -5,6 +5,8 @@
 #include <list>
 #include <iostream>
 
+/// @brief Struct que representa una entrada individual dentro de la tabla hash abierta (nodo de la lista enlazada).
+/// @tparam CType Tipo de dato de la clave (ej. long long para user_id o string para user_screen_name).
 template <typename CType>
 struct EntradaAbierta {
     CType clave;
@@ -13,6 +15,8 @@ struct EntradaAbierta {
     EntradaAbierta(CType c, int v) : clave(c), valor(v) {}
 };
 
+/// @brief Implementación de Tabla Hash con hashing abierto.
+/// @tparam CType Tipo de dato de la clave.
 template <typename CType>
 class TablaHashingAbierto {
 private:
@@ -22,10 +26,15 @@ private:
     int funcionHash(CType clave) const;
 
 public:
+    /// @brief Constructor que inicializa la tabla hash.
+    /// @param s Tamaño inicial del vector principal.
     TablaHashingAbierto(int s) : size(s) {
         tabla.resize(size);
     }
 
+    /// @brief Inserta una entrada en la tabla o actualiza su valor si la clave ya existe.
+    /// @param clave La clave de la entrada que se desea insertar o actualizar.
+    /// @param valor Un entero asociado a la clave (conteo de tweets).
     void insertar(CType clave, int valor) {
         int indice = funcionHash(clave);
 
@@ -41,6 +50,10 @@ public:
         tabla[indice].emplace_back(clave, valor);
     }
 
+    /// @brief Busca una clave en la tabla y recupera su valor asociado.
+    /// @param clave La clave que se desea buscar.
+    /// @param resultado Referencia a un entero donde se almacenará el valor en caso de éxito.
+    /// @return true si la clave fue encontrada, false en caso de que no exista.
     bool get(CType clave, int& resultado) const {
         int indice = funcionHash(clave);
 
@@ -54,6 +67,8 @@ public:
         return false;
     }
 
+    /// @brief Elimina una entrada de la tabla buscando por su clave.
+    /// @param clave La clave de la entrada que se desea eliminar.
     void remover(CType clave) {
         int indice = funcionHash(clave);
 
@@ -65,6 +80,7 @@ public:
         }
     }
 
+    /// @brief Imprime todos los pares (Clave, Valor) almacenados actualmente en la tabla.
     void imprimir() const {
         std::cout << "\n--- Estado actual de la Tabla Hash (Abierto) ---" << std::endl;
         std::cout << "Índice\t(Clave, Valor)" << std::endl;
@@ -103,8 +119,7 @@ public:
 
 };
 
-// --- Función Hash para string (user_screen_name) ---
-
+/// @brief Función hash para claves de tipo string (user_screen_name) usando un hash polinomial.
 template <>
 int TablaHashingAbierto<std::string>::funcionHash(std::string clave) const {
     long long h = 0;
@@ -115,8 +130,7 @@ int TablaHashingAbierto<std::string>::funcionHash(std::string clave) const {
     return h;
 }
 
-// --- Función Hash para long long (user_id) ---
-
+/// @brief Especialización de la función hash para claves de tipo long long (user_id)
 template <>
 int TablaHashingAbierto<long long>::funcionHash(long long clave) const {
     return clave % size;
